@@ -5,6 +5,7 @@ class apiError extends Error{
         stack="",
         message="Something went wrong"
     ){
+        super(message)
         this.statusCode = statusCode,
         this.errors = errors,
         this.message = message,
