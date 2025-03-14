@@ -10,6 +10,14 @@ const registerUser = asyncHandler(async(req,res)=>{
         throw new apiError(500,"All fields are required")
     }
     
+    const existedUser = await User.findOne({
+        $or:[{username},{email}]
+    })
+    if(existedUser){
+        throw new apiError(
+            
+        )
+    }
 }) 
 
 export{
