@@ -9,6 +9,9 @@ const generateAccessAndRefreshToken = async(userId)=>{
         const user = await User.findById(userId)
         const accessToken = generateAccessToken()
         const refreshToken = generateRefreshToken()
+        user.refreshToken = refreshToken
+
+        return {accessToken, refreshToken}
     } catch (error) {
         throw new apiError(500,"Something went wrong while generating access and refresh token")
     }
@@ -130,9 +133,38 @@ const logoutUser = asyncHandler(async(req,res)=>{
     .json(new apiResponse(201,{},"User logout successfully"))
     
 })
+const refreshAccessToken = asyncHandler(async(req,res)=>{
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
 
+    if(!incomingRefreshToken){
+        throw new apiError(401,"unauthorised token")
+    }
+    try {
+        const decodedToken = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET)
+        const user = await User.findById(decodedToken?._id)
+
+        if(!user){
+            throw new apiError(401,"Invalid refreshToken")
+        }
+        if(incomingRefreshToken !== user?.refreshToken){
+            throw new apiError(401,"refresh token is expired or used")
+        }
+        const options={
+            httpOnly:true,
+            secure:true
+        
+        }
+        const {accessToken,newRefreshToken} = generateAccessAndRefreshToken(user._id)
+
+        return res.status(200).cookies("accessToken",accessToken,options).cookies("refreshToken",newRefreshToken,cookies).json(new apiResponse(200,{accessToken,refreshToken:newRefreshToken},"Access toke is refreshed"))
+
+    } catch (error) {
+        throw new apiError(401,error?.message || "invalid refresh token")
+    }
+})
 export{
     RegisterUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    refreshAccessToken
 }
