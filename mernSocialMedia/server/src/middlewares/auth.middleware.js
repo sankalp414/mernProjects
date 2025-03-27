@@ -16,5 +16,4 @@ const verifyJWT = asyncHandler(async(req,_,next)=>{
     if(!decodedToken){
         throw new apiError(401,"Invalid access token")
     }
-
 })
