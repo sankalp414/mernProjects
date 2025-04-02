@@ -1,5 +1,6 @@
 import Router from "express"
-import { loginUser, registerUser } from "../controllers/user.controller"
+import { loginUser, logoutUser, refreshAccessToken, registerUser } from "../controllers/user.controller"
+import { verifyJWT } from "../middlewares/auth.middleware"
 
 
 const router = Router()
@@ -7,4 +8,5 @@ const router = Router()
 
 router.route("/login",loginUser)
 router.route("/register",registerUser)
-router.route("/logout",)
+router.route("/logout",verifyJWT,logoutUser)
+router.route("/refresh-token",verifyJWT,refreshAccessToken)
