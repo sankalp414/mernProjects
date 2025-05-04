@@ -20,8 +20,8 @@ export const AppContextProvider = ({children})=>{
     }
 
     //add product to cart
-    const addToCart =()=>{
-        let cartItems = structuredClone(cartItems)
+    const addToCart =(itemId)=>{
+        let cartData = structuredClone(cartItems)
 
         if(cartData[itemId]){
             cartData[itemId] += 1
@@ -29,7 +29,7 @@ export const AppContextProvider = ({children})=>{
             cartData[itemId] =1
         }
         setCartItems(cartData)
-        toast.success("Added to cart")
+        toast.success("Added to cart successfully")
     }
     //update card item quantity
     const updateCartItem = (itemId,quantity)=>{
