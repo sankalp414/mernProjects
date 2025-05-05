@@ -6,7 +6,7 @@ import { useAppContext } from "../context/AppContext";
 import { useEffect } from "react";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const { user, setUser, setShowUserLogin, navigate,setSearchQuery,searchQuery } = useAppContext();
+  const { user, setUser, setShowUserLogin, navigate,setSearchQuery,searchQuery ,getCartCount} = useAppContext();
   const logout = async () => {
     setUser(null);
     navigate("/");
@@ -42,7 +42,7 @@ const Navbar = () => {
         <div className="relative cursor-pointer">
           <img  onClick={()=> navigate("/cart")}src={assets.nav_cart_icon} className="w-6 opacity-80" />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full">
-            3
+            {getCartCount()}
           </button>
         </div>
 
