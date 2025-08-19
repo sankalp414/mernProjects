@@ -1,12 +1,12 @@
-import mongoose, { Schema } from "mongoose"
+import mongoose, { Schema } from "mongoose";
 
 const todoSchema = new Schema({
     title:{
         type:String,
         required:true,
-        index:true,
+        index:true
     },
-    content:{
+    description:{
         type:String,
         default:""
     },
