@@ -23,6 +23,45 @@ const createTodo = asyncHandler(async(req,res)=>{
 
 })
 
+const updateTodo = asyncHandler(async(req,res)=>{
+    const {todoId} = req.params
+    const {title,description} = req.body
+
+    const todo = await Todo.findByIdAndUpdate({
+        todoId,
+        $set:{
+            title,
+            description
+        },
+        
+    },
+    {new:true}
+)
+    return res
+    .status(200)
+    .json(new apiResponse(200,todo,"Todo updated successfully"))
+})
+
+const deleteTodo = asyncHandler(async(req,res)=>{
+    const {todoId} = req.params
+    const {title,description} = req.body
+
+    const todo = await Todo.findByIdAndDelete({
+        todoId,
+        $unset:{
+            title,
+            content
+        }
+    },{new:true})
+    
+    return res.status(200).json(new apiResponse(200,{},"Todo deleted successfully"))
+})
+
+
+
+
 export{
-    createTodo
+    createTodo,
+    updateTodo,
+    deleteTodo
 }
