@@ -1,7 +1,7 @@
-import { Todo } from "../models/todo.model";
-import { apiError } from "../utils/apiError";
-import { apiResponse } from "../utils/apiResponse";
-import { asyncHandler } from "../utils/asyncHandler";
+import { Todo } from "../models/todo.model.js";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 const createTodo = asyncHandler(async(req,res)=>{
     const {title,description} = req.body
