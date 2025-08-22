@@ -56,8 +56,8 @@ export const AppContextProvider = ({children})=>{
     const getCartCount = ()=>{
         let totalCount = 0
 
-        for(items in cartItems){
-            totalCount += cartItems[item]
+        for(const items in cartItems){
+            totalCount += cartItems[items]
         }
         return totalCount
     }
