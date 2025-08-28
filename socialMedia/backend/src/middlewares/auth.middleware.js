@@ -1,18 +1,30 @@
-import { User } from "../models/user.model"
-import { apiError } from "../utils/apiError"
+import { User } from "../models/user.model";
+import { apiError } from "../utils/apiError";
+import { asyncHandler } from "../utils/asyncHandler";
 import jwt from "jsonwebtoken"
 
+export const verifyJWT = asyncHandler(async(req,res,next)=>{
 
-export const verifyJWT = async()=>{
     try {
-        const incommingRefreshToken = req.cookies?.refreshToken || req.headers("Authorization").replace("Bearer","")
+        const token = req.cookies.accessToken || req.body.accessToken
 
-        if(!incommingRefreshToken){
-            throw new apiError(400,"invalid refresh token")
+        if(!token){
+            throw new apiError(400,"Unauthoized token")
         }
-        const decodedToken = jwt.verify(incommingRefreshToken,process.env) 
+        const decodedToken = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
+
+
+        const user = await User.findById(decodedToken?._id).select("-password -refreshToken")
+
+        if(!user){
+            throw new apiError(400,"Invalid access token")
+        }
+        req.user = user
+        next()
 
     } catch (error) {
-        throw new apiError(400,"Invalid refresh token")
+        throw new apiError(401,error?.message || "Invalid access token")
     }
-}
+})
+
+
