@@ -30,11 +30,11 @@ const userSchema = new Schema({
         trim:true,
         unique:true
     },
-    avatarImg:{
+    avatar:{
         type:String,
         required:true
     },
-    coverImg:{
+    coverImage:{
         type:String,
     },
     refreshToken:{
